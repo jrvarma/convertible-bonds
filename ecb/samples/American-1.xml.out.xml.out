@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Output Output_Interest_Rate_Compounding="annual">
+  <Input_Data type="Put">
+    <Outputs Input_Data="true" Lattice_Parameters="true" Full_Lattice="true" Option_Results="true"/>
+    <Computational_Parameters No_of_Lattice_Points="5" Vega_Computation="centralDifferences"/>
+    <Stock Unadjusted_Stock_Price="100" Dividend_Yield_Percent="0">
+      <Known_Dividends/>
+    </Stock>
+    <Option Exercise_Price="120" Earliest_Exercise="0" Latest_Exercise="5" Volatility_Percent="20" Riskfree_Rate_Percent="10"/>
+  </Input_Data>
+  <Lattice_Paramaters No_of_Lattice_Points="5" Present_Value_of_Discrete_Dividends="0" Stock_Price_Adjusted_for_Dividends="100" Continously_Compounded_Riskfree_Rate="0.0953102" Continously_Compounded_Dividend_Rate="0" Continously_Compounded_Net_Growth_Rate="0.0953102" u="1.2214" d="0.818731" p="0.698507"/>
+  <Full_Lattice>
+    <Stage Step="5" Time="5">
+      <Node S="271.828" V="0.000000"/>
+      <Node S="182.212" V="0.000000"/>
+      <Node S="122.14" V="0.000000"/>
+      <Node S="81.8731" V="38.126925" Action="Exercised"/>
+      <Node S="54.8812" V="65.118836" Action="Exercised"/>
+      <Node S="36.7879" V="83.212056" Action="Exercised"/>
+    </Stage>
+    <Stage Step="4" Time="4">
+      <Node S="222.554" V="0.000000"/>
+      <Node S="149.182" V="0.000000"/>
+      <Node S="100" V="20.000000" Action="Exercised"/>
+      <Node S="67.032" V="52.967995" Action="Exercised"/>
+      <Node S="44.9329" V="75.067104" Action="Exercised"/>
+    </Stage>
+    <Stage Step="3" Time="3">
+      <Node S="182.212" V="0.000000"/>
+      <Node S="122.14" V="5.481689"/>
+      <Node S="81.8731" V="38.126925" Action="Exercised"/>
+      <Node S="54.8812" V="65.118836" Action="Exercised"/>
+    </Stage>
+    <Stage Step="2" Time="2">
+      <Node S="149.182" V="1.502446"/>
+      <Node S="100" V="20.000000" Action="Exercised"/>
+      <Node S="67.032" V="52.967995" Action="Exercised"/>
+    </Stage>
+    <Stage Step="1" Time="1">
+      <Node S="122.14" V="6.435752"/>
+      <Node S="81.8731" V="38.126925" Action="Exercised"/>
+    </Stage>
+    <Stage Step="0" Time="0">
+      <Node S="100" V="20.000000" Action="Exercised"/>
+    </Stage>
+  </Full_Lattice>
+  <Option_Results Option_Value="20" Delta="-0.626479" Gamma="0.0151892" Theta_Indirect="4.83935" Theta_Direct_2dt="-1.42109e-014" Theta_Direct_4dt="-7.10543e-015" Vega="1.42109e-011"/>
+</Output>

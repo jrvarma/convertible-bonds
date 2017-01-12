@@ -1,0 +1,109 @@
+All interest rates below are on the basis of semi-annual compounding.
+Input_Data
+   type = Call (Convertible)
+   Outputs
+      Input_Data = true
+      Lattice_Parameters = true
+      Full_Lattice = true
+      Option_Results = true
+      Bond_Results = true
+   Computational_Parameters
+      No_of_Lattice_Points = 6
+      Vega_Computation = centralDifferences
+      YTM_Computation = true
+      YTM_Tolerance = 0.01
+      YTM_Iteration_Limit = 20
+      Lattice_Discounting = probWeighted
+   Stock
+      Unadjusted_Stock_Price = 8.19
+      Country-Discount_on_Stock_Price_Percent = 15
+      Discounted_Stock_Price = 6.9615
+      Dividend_Yield_Percent = 1.75699
+      Known_Dividends
+   Option
+      Exercise_Price = 9.18
+      Earliest_Exercise = 0.5
+      Latest_Exercise = 6
+      Volatility_Percent = 30
+      Riskfree_Rate_Percent = 5.25
+   Bond
+      Residual_Bond_Maturity_in_Years = 6
+      Coupon_Rate_Percent = 3.5
+      Coupon_Frequency_per_Year = 1
+      Required_Yield_Percent = 8.75
+      Redemption_Value_Percent_of_Face_Value = 100
+      Bond_Price = 104.999
+   Call_Provisions
+      [Min_Time = 3.5  Max_Time = 6  Price = 12.85  Redeem = 100]
+      [Min_Time = 5.5  Max_Time = 6  Price = 0  Redeem = 100]
+   Put_Provisions
+      [Min_Time = 5.5  Max_Time = 5.5  Yield_to_Put_Percent = 5.9126]
+   Expected_Currency_Appreciation
+      Dividends = 0
+      Coupons = 0
+      Redemption = 0
+      Call_Price_Limits = 0
+      Call_Redemption_Values = 0
+      Put_Prices = 0
+Lattice_Paramaters
+   No_of_Lattice_Points = 6
+   Present_Value_of_Discrete_Dividends = 0
+   Stock_Price_Adjusted_for_Dividends = 6.9615
+   Continously_Compounded_Riskfree_Rate = 0.0518228
+   Continously_Compounded_Dividend_Rate = 0.0174932
+   Continously_Compounded_Net_Growth_Rate = 0.0343296
+   u = 1.34986
+   d = 0.740818
+   p = 0.482903
+Full_Lattice
+   Bond_Redemption_Value = 9.18
+   Step = 6.  Time = 6.  Coupons = 0.3213.  
+      [S = 42.1146  V = 42.435921  R = 5.18228  Action = Exercised]
+      [S = 23.113  V = 23.434294  R = 5.18228  Action = Exercised]
+      [S = 12.6847  V = 13.005980  R = 5.18228  Action = Exercised]
+      [S = 6.9615  V = 11.102136  R = 8.564  Action = Put]
+      [S = 3.82055  V = 11.102136  R = 8.564  Action = Put]
+      [S = 2.09676  V = 11.102136  R = 8.564  Action = Put]
+      [S = 1.15073  V = 11.102136  R = 8.564  Action = Put]
+   Step = 5.  Time = 5.  Coupons = 0.3213.  
+      [S = 31.1993  V = 31.520578  R = 5.18228  Action = Exercised]
+      [S = 17.1225  V = 17.443827  R = 5.18228  Action = Called]
+      [S = 9.39704  V = 11.554433  R = 6.94523]
+      [S = 5.15721  V = 10.512224  R = 8.564]
+      [S = 2.83033  V = 10.512224  R = 8.564]
+      [S = 1.55332  V = 10.512224  R = 8.564]
+   Step = 4.  Time = 4.  Coupons = 0.3213.  
+      [S = 23.113  V = 23.434294  R = 5.18228  Action = Exercised]
+      [S = 12.6847  V = 13.893440  R = 6.09777]
+      [S = 6.9615  V = 10.516291  R = 7.78556]
+      [S = 3.82055  V = 9.970729  R = 8.564]
+      [S = 2.09676  V = 9.970729  R = 8.564]
+   Step = 3.  Time = 3.  Coupons = 0.3213.  
+      [S = 17.1225  V = 17.825540  R = 5.65672]
+      [S = 9.39704  V = 11.664226  R = 6.97408]
+      [S = 5.15721  V = 9.751937  R = 8.18885]
+      [S = 2.83033  V = 9.473678  R = 8.564]
+   Step = 2.  Time = 2.  Coupons = 0.3213.  
+      [S = 12.6847  V = 14.081116  R = 6.34009]
+      [S = 6.9615  V = 10.220760  R = 7.60407]
+      [S = 3.82055  V = 9.157013  R = 8.38301]
+   Step = 1.  Time = 1.  Coupons = 0.3213.  
+      [S = 9.39704  V = 11.601520  R = 6.99569]
+      [S = 5.15721  V = 9.249846  R = 8.00762]
+   Step = 0.  Time = 0.  Coupons = 0.  
+      [S = 6.9615  V = 9.638868  R = 7.52023]
+Option_Results
+   Bond_Convertible_into_One_Share_Face_Value = 9.18
+   Bond_Convertible_into_One_Share_Straight_Value = 6.93527
+   Bond_Convertible_into_One_Share_Option_Value = 2.7036
+   Delta = 0.555509
+   Gamma = 0.0757754
+   Vega = 5.36963
+Bond_Value_Results
+   Bond_Value = 104.999
+   Straight_Bond_Value = 75.5476
+   Option_Value = 29.451
+YTM
+   Bond_Price = 104.999
+   YTM_Percent = 8.75
+   OAS_Basis_Points = 350

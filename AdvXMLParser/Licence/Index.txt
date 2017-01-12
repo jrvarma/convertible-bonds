@@ -1,0 +1,31 @@
+------------------------------------------------------------------------------------------------------------------
+AdvXmlParser
+version 1.1.4
+------------------------------------------------------------------------------------------------------------------
+See XmlReader.h
+------------------------------------------------------------------------------------------------------------------
+
+AdvXmlParser.h                  Declarations for the Parser. Include this file where you whant to use the parser
+AdvXmlParserConfig.h            Parameters of the parser. Change them to fit your needs
+
+AdvXmlParserDefs.h              Some helpers (macros) used internally.
+AdvXmlParserPrimitiveTypes.h    Defines all the primitive types used by the parser.
+AdvXmlParserUtils.h             Some helpers used internally.
+
+Elements.cpp                    Implementation of the Element, Attribute, Value, ... classes
+Elements.inl                    Inline functions
+Iterators.inl                   Implementation of Iterators (inline functions)
+TemplateMembers.inl             Template member functions. Included by AdvXmlParser.h
+Reader.cpp                      Implementation of the Parser 
+Reader.inl                      Inline functions
+Writer.cpp                      Implementation of function for generating XML
+Writer.inl                      Inline functions
+Utils.cpp                       Some helpers used internally
+
+/Samples                        Examples of what you can do with the parser
+/Samples/*.xml                  Some samples of XML document
+/Samples/Sample1                Extract the first town of the XML document sample.xml
+/Samples/Sample2                Enumerate and display element in a XML document
+/Samples/Sample3                Generate a XML document dynamically
+/Samples/SampleMFC              MFC (Windows) sample. It reads a XML document and display the hierarchy (including attributes, values, comments, etc) in a tree
+

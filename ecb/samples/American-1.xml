@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<ecbdata 
+xmlns="ecbdata.xsd" 
+xsi:schemaLocation="ecbdata.xsd ecbdata.xsd"
+xmlns:xsi="http://www.w3.org/2000/10/XMLSchema-instance">
+
+<American>
+
+<Stock currentPrice="100" volatilityPercent="20">
+<dividends yieldPercent="0" yieldCompounding="continuous">
+<!-- 
+compounding choices are annual semiAnnual continuous
+-->
+<!--
+<knownDiv amount="" year=""/>
+-->
+</dividends>
+</Stock>
+
+<Option type="put" exercisePrice="120" maturity="5" 
+ earliestExercise="0"/>
+<!-- 
+option types are call put
+-->
+
+<riskFreeRatePercent rate="10" compounding="annual"/>
+
+
+<Computation 
+numberOfLatticePoints="5" 
+/>
+
+<Outputs
+inputData="true"
+latticeParameters="true"
+fullLattice="true"
+optionResults="true"
+outputInterestRateCompounding="annual"
+vega="centralDifferences"
+/>
+
+<!--
+vega choices are
+none forwardDifferences centralDifferences
+-->
+
+</American>
+</ecbdata>
+

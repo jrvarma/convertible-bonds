@@ -1,0 +1,394 @@
+<?xml version="1.0"?>
+<!DOCTYPE xsd:schema SYSTEM "XMLSchema.dtd" [
+<!ATTLIST xsd:schema xmlns:xsd CDATA #IMPLIED>
+<!ATTLIST xsd:schema xmlns CDATA #IMPLIED>
+<!ENTITY % p "xsd:">
+<!ENTITY % s ":xsd">
+]>
+<xsd:schema xmlns:xsd="http://www.w3.org/2000/10/XMLSchema"
+    targetNamespace="ecbdata.xsd"
+    xmlns="ecbdata.xsd"
+    elementFormDefault="qualified">
+
+<xsd:element name="ecbdata">
+<xsd:complexType>
+<xsd:choice>
+	<xsd:element ref="American"/>
+	<xsd:element ref="convertible"/>
+</xsd:choice>
+</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="American">
+<xsd:complexType>
+<xsd:all>
+    <xsd:element ref="Stock"/>
+    <xsd:element ref="Option" minOccurs="1"/>
+    <xsd:element ref="riskFreeRatePercent"/>
+    <xsd:element ref="Computation"/>
+    <xsd:element ref="Outputs"/>
+</xsd:all>
+</xsd:complexType>
+</xsd:element>   <!-- American -->
+
+
+
+<!-- 
+                        Global Type Declarations
+-->
+
+<xsd:simpleType name="nonNegativeReal">
+<xsd:restriction base="xsd:double">
+<xsd:minInclusive value="0"/>
+</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:complexType name="rate">
+<xsd:attribute name="rate" type="rateValue"/>
+<xsd:attribute name="compounding" type="rateType" use="required"/>
+</xsd:complexType>
+
+<xsd:simpleType name="rateValue">
+<xsd:restriction base="xsd:double">
+<xsd:minInclusive value="-100"/>
+</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="rateType">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="continuous"/>
+<xsd:enumeration value="semiAnnual"/>
+<xsd:enumeration value="annual"/>
+</xsd:restriction>
+</xsd:simpleType>
+
+
+<!--
+                                Stock
+-->
+
+<xsd:element name="Stock">
+<xsd:complexType>
+<xsd:sequence>
+    <xsd:element name="dividends">
+    <xsd:complexType>
+	<xsd:sequence>
+	<xsd:element name="knownDiv" minOccurs="0" maxOccurs="unbounded">
+	    <xsd:complexType>
+		<xsd:attribute name="amount" type="nonNegativeReal" 
+	         use="required"/>
+		<xsd:attribute name="year" type="nonNegativeReal"
+	         use="required"/>
+	    </xsd:complexType>
+        </xsd:element>
+	</xsd:sequence>
+	<xsd:attribute name="yieldPercent" type="nonNegativeReal"
+	 use="required"/>
+	<xsd:attribute name="yieldCompounding" type="rateType"
+	 use="required"/>
+    </xsd:complexType>
+    </xsd:element>
+</xsd:sequence>
+    <xsd:attribute name="currentPrice" type="nonNegativeReal"
+     use="required"/>
+    <xsd:attribute name="volatilityPercent" type="nonNegativeReal"
+     use="required"/>
+</xsd:complexType>
+</xsd:element>  <!-- stock -->
+
+<!-- 
+                                Option
+-->
+<xsd:element name="Option">
+<xsd:complexType>
+<xsd:attribute name="type" use="required">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="call"/>
+<xsd:enumeration value="put"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:attribute>
+<xsd:attribute name="exercisePrice" type="nonNegativeReal"
+ use="required"/>
+<xsd:attribute name="maturity" type="nonNegativeReal"
+ use="optional"/>
+<xsd:attribute name="earliestExercise" type="nonNegativeReal"
+ use="required"/>
+</xsd:complexType>
+</xsd:element>   <!-- option -->
+
+<!-- 
+                                Risk Free Rate
+-->
+<xsd:element name="riskFreeRatePercent" type="rate"/>
+
+
+<!-- 
+                        Computational parameters
+-->
+
+<xsd:element name="Computation">
+<xsd:complexType>
+
+<xsd:attribute name="numberOfLatticePoints" use="required">
+<xsd:simpleType>
+<xsd:restriction base="xsd:integer">
+<xsd:minInclusive value="2"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:attribute>
+
+</xsd:complexType>
+</xsd:element>   <!-- computation -->
+
+<xsd:element name="Outputs">
+<xsd:complexType>
+
+<xsd:attribute name="inputData" type="xsd:boolean" use="required"/>
+<xsd:attribute name="latticeParameters" type="xsd:boolean" use="required"/>
+<xsd:attribute name="fullLattice" type="xsd:boolean" use="required"/>
+<xsd:attribute name="optionResults" type="xsd:boolean" use="required"/>
+<xsd:attribute name="outputInterestRateCompounding" type="rateType" 
+ use="required"/>
+<xsd:attribute name="vega" use="required">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="none"/>
+<xsd:enumeration value="forwardDifferences"/>
+<xsd:enumeration value="centralDifferences"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:attribute>
+
+</xsd:complexType>
+</xsd:element>   <!-- outputs -->
+
+
+<xsd:element name="convertible">
+<xsd:complexType>
+<xsd:all>
+    <xsd:element ref="bond" minOccurs="1"/>
+    <xsd:element ref="stock"/>
+    <xsd:element ref="conversion"/>
+    <xsd:element ref="callProvisions"/>
+    <xsd:element ref="putProvisions"/>
+    <xsd:element ref="currencyAppreciation"/>
+    <xsd:element ref="computation"/>
+    <xsd:element ref="outputs"/>
+</xsd:all>
+</xsd:complexType>
+</xsd:element>   <!-- convertible -->
+
+
+
+<!-- 
+                                Bond 
+-->
+
+<xsd:element name="bond">
+<xsd:complexType>
+<xsd:sequence>
+
+<xsd:element name="maturity">
+<xsd:complexType>
+<xsd:attribute name="years" type="xsd:integer" use="required"/>
+<xsd:attribute name="days" type="xsd:integer" use="required"/>
+</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="coupon">
+<xsd:complexType>
+<xsd:attribute name="rate" type="nonNegativeReal" use="required"/>
+<xsd:attribute name="frequency" type="xsd:positiveInteger" use="required"/>
+</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="riskFreeRatePercent" type="rate"/>
+
+<xsd:element name="requiredYieldPercent" type="rate"/>
+
+</xsd:sequence>
+
+<xsd:attribute name="redemptionValue" type="nonNegativeReal" 
+use="required"/>
+
+<xsd:attribute name="currentPrice" type="nonNegativeReal" 
+use="required"/>
+
+</xsd:complexType>
+</xsd:element>  <!-- Bond -->
+
+
+
+<!--
+                                Stock
+-->
+
+<xsd:element name="stock">
+<xsd:complexType>
+<xsd:sequence>
+    <xsd:element name="dividends">
+    <xsd:complexType>
+	<xsd:sequence>
+	<xsd:element name="knownDiv" minOccurs="0" maxOccurs="unbounded">
+	    <xsd:complexType>
+		<xsd:attribute name="amount" type="nonNegativeReal" 
+	         use="required"/>
+		<xsd:attribute name="year" type="nonNegativeReal"
+	         use="required"/>
+	    </xsd:complexType>
+        </xsd:element>
+	</xsd:sequence>
+	<xsd:attribute name="yieldPercent" type="nonNegativeReal"
+	 use="required"/>
+	<xsd:attribute name="yieldCompounding" type="rateType"
+	 use="required"/>
+    </xsd:complexType>
+    </xsd:element>
+</xsd:sequence>
+    <xsd:attribute name="currentPrice" type="nonNegativeReal"
+     use="required"/>
+    <xsd:attribute name="countryDiscountPercent" type="nonNegativeReal"
+     use="required"/>
+    <xsd:attribute name="volatilityPercent" type="nonNegativeReal"
+     use="required"/>
+</xsd:complexType>
+</xsd:element>  <!-- stock -->
+
+<!-- 
+                                Conversion
+-->
+<xsd:element name="conversion">
+<xsd:complexType>
+<xsd:attribute name="conversionPrice" type="nonNegativeReal"
+ use="required"/>
+<xsd:attribute name="maturity" type="nonNegativeReal"
+ use="optional"/>
+<xsd:attribute name="earliestConversion" type="nonNegativeReal"
+ use="required"/>
+</xsd:complexType>
+</xsd:element>   <!-- conversion -->
+
+
+<!-- 
+                                Calls
+-->
+<xsd:element name="callProvisions">
+<xsd:complexType>
+<xsd:sequence>
+    <xsd:element name="call" minOccurs="0" maxOccurs="unbounded">
+    <xsd:complexType>
+    <xsd:attribute name="minTime" type="nonNegativeReal" use="required"/>
+    <xsd:attribute name="maxTime" type="nonNegativeReal" use="required"/>
+    <xsd:attribute name="minPrice" type="nonNegativeReal" use="required"/>
+    <xsd:attribute name="redemptionValue" type="nonNegativeReal" 
+     use="required"/>
+    </xsd:complexType>
+    </xsd:element>
+</xsd:sequence>
+<xsd:attribute name="ignore" type="xsd:boolean" use="required"/>
+</xsd:complexType>
+</xsd:element>    <!-- call provisions -->
+
+<!-- 
+                                Puts
+-->
+<xsd:element name="putProvisions">
+<xsd:complexType>
+<xsd:sequence>
+    <xsd:element name="put" minOccurs="0" maxOccurs="unbounded">
+    <xsd:complexType>
+    <xsd:attribute name="minTime" type="nonNegativeReal" use="required"/>
+    <xsd:attribute name="maxTime" type="nonNegativeReal" use="required"/>
+    <xsd:attribute name="putValue" type="nonNegativeReal" use="required"/>
+    <xsd:attribute name="valueType" use="required">
+	<xsd:simpleType>
+	<xsd:restriction base="xsd:string">
+	<xsd:enumeration value="continuousYieldPercent"/>
+	<xsd:enumeration value="semiAnnualYieldPercent"/>
+	<xsd:enumeration value="annualYieldPercent"/>
+	<xsd:enumeration value="amount"/>
+	</xsd:restriction>
+	</xsd:simpleType>
+    </xsd:attribute>
+    </xsd:complexType>
+    </xsd:element>
+</xsd:sequence>
+<xsd:attribute name="ignore" type="xsd:boolean" use="required"/>
+</xsd:complexType>
+</xsd:element>    <!-- put provisions -->
+
+<!-- 
+                                Currencies
+-->
+<xsd:element name="currencyAppreciation">
+<xsd:complexType>
+<xsd:attribute name="dividends" type="rateValue" use="required"/>
+<xsd:attribute name="coupons" type="rateValue" use="required"/>
+<xsd:attribute name="redeem" type="rateValue" use="required"/>
+<xsd:attribute name="callPrice" type="rateValue" use="required"/>
+<xsd:attribute name="callRedeem" type="rateValue" use="required"/>
+<xsd:attribute name="putValue" type="rateValue" use="required"/>
+<xsd:attribute name="compounding" type="rateType" use="required"/>
+</xsd:complexType>
+</xsd:element>    <!-- currencies -->
+
+<!-- 
+                        Computational parameters
+-->
+
+<xsd:element name="computation">
+<xsd:complexType>
+
+<xsd:attribute name="numberOfLatticePoints" use="required">
+<xsd:simpleType>
+<xsd:restriction base="xsd:integer">
+<xsd:minInclusive value="2"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:attribute>
+
+<xsd:attribute name="latticeDiscounting" use="required">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="riskFree"/>
+<xsd:enumeration value="bondYield"/>
+<xsd:enumeration value="probWeighted"/>
+<xsd:enumeration value="probAndValueWeighted"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:attribute>
+
+</xsd:complexType>
+</xsd:element>   <!-- computation -->
+
+<xsd:element name="outputs">
+<xsd:complexType>
+
+<xsd:attribute name="inputData" type="xsd:boolean" use="required"/>
+<xsd:attribute name="latticeParameters" type="xsd:boolean" use="required"/>
+<xsd:attribute name="fullLattice" type="xsd:boolean" use="required"/>
+<xsd:attribute name="optionResults" type="xsd:boolean" use="required"/>
+<xsd:attribute name="bondResults" type="xsd:boolean" use="required"/>
+<xsd:attribute name="ytm" type="xsd:boolean" use="required"/>
+<xsd:attribute name="outputInterestRateCompounding" type="rateType" 
+ use="required"/>
+<xsd:attribute name="ytmToler" type="nonNegativeReal" use="optional"/>
+<xsd:attribute name="maxIter" type="xsd:positiveInteger" use="optional"/>
+<xsd:attribute name="vega" use="required">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="none"/>
+<xsd:enumeration value="forwardDifferences"/>
+<xsd:enumeration value="centralDifferences"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:attribute>
+
+</xsd:complexType>
+</xsd:element>   <!-- outputs -->
+
+
+</xsd:schema>
+

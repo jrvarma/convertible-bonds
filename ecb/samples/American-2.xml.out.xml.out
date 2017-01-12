@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Output Output_Interest_Rate_Compounding="annual">
+  <Option_Results Option_Value="4.38207" Delta="-0.210043" Gamma="0.0108496" Theta_Indirect="-0.231973" Theta_Direct_2dt="-0.145172" Theta_Direct_4dt="-0.15353" Vega="50.7747"/>
+</Output>
