@@ -90,18 +90,12 @@ char* OpenXmlFile(FILE* pFile, long& nSize)
 //              returned buffer with delete[]
 // ---------------------------------------------
 {
-    // Compute the size of the file
-    fseek(pFile, 0, SEEK_END);
-    nSize = ftell(pFile);
-    // Put the file pointer at the beginning
-    fseek(pFile, 0, SEEK_SET);
-
     // Allocate a buffer big enough
     char* pBuffer = new char[nSize + 1];
     // Put the XML file data in the buffer
-    fread(pBuffer, nSize, 1, pFile);
+    long bytes = fread(pBuffer, 1, nSize, pFile);
     // Put a 0 char at the end
-    pBuffer[nSize] = 0;
+    pBuffer[bytes] = 0;
     // Close the file
     fclose(pFile), pFile = 0;
 

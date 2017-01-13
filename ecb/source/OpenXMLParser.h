@@ -26,6 +26,7 @@ Sebastien Andrivet which is covered by a separate licence see file
 _AdvXMLParser.h
 */
 
+#include "stddef.h"
 #include "../../AdvXMLParser/AdvXMLParser.h"
 using namespace AdvXMLParser;
 char* OpenXmlFile(FILE* pFile, long& nSize);

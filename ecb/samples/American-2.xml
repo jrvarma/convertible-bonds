@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <ecbdata 
 xmlns="ecbdata.xsd" 
-xsi:schemaLocation="ecbdata.xsd ecbdata.xsd"
-xmlns:xsi="http://www.w3.org/2000/10/XMLSchema-instance">
+xsi:schemaLocation="ecbdata.xsd ../ecbdata.xsd"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 <American>
 

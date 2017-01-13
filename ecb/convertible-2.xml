@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ecbdata 
 xmlns="ecbdata.xsd" 
-xsi:schemaLocation="ecbdata.xsd ../ecbdata.xsd"
+xsi:schemaLocation="ecbdata.xsd ecbdata.xsd"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 <convertible>
@@ -23,6 +23,7 @@ countryDiscountPercent="15"
 volatilityPercent="30"
 >
 <dividends yieldPercent="1.5" yieldCompounding="annual">
+<knownDiv amount="1" year="1.5"/>
 <!--
 <knownDiv amount="" year=""/>
 -->
@@ -41,7 +42,7 @@ unless the maturity attribute is set here to a different value
 </callProvisions>
 
 
-<putProvisions ignore="false">
+<putProvisions ignore="ignore">
 <put minTime="5.5" maxTime="5.5" putValue="6" 
 valueType="annualYieldPercent"/>
 <!--
@@ -58,12 +59,13 @@ numberOfLatticePoints="6"
 />
 
 <outputs
-inputData="true"
+inputData="false"
 latticeParameters="true"
 fullLattice="true"
 optionResults="true"
 bondResults="true"
 ytm="true"
+ytmToler="0.0001"
 outputInterestRateCompounding="semiAnnual"
 vega="centralDifferences"
 />

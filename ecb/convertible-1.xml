@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ecbdata 
 xmlns="ecbdata.xsd" 
-xsi:schemaLocation="ecbdata.xsd ../ecbdata.xsd"
+xsi:schemaLocation="ecbdata.xsd ecbdata.xsd"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 <convertible>
@@ -10,7 +10,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <maturity years="6" days="0"/>
 <coupon rate="3.5" frequency="1"/>
 <riskFreeRatePercent rate="5.25" compounding="semiAnnual"/>
-<requiredYieldPercent rate="8.75" compounding="semiAnnual"/>
+<requiredYieldPercent rate="25.95" compounding="semiAnnual"/>
 <!-- 
 frequency is integer 
 compounding choices are annual semiAnnual continuous
@@ -65,7 +65,7 @@ optionResults="true"
 bondResults="true"
 ytm="true"
 outputInterestRateCompounding="semiAnnual"
-vega="centralDifferences"
+vega="none"
 />
 <!--
 the following default values apply unless set here explicitly

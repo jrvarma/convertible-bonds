@@ -20,7 +20,7 @@ if errorlevel 2 set file=American-2.xml
 if errorlevel 3 set file=Convertible-1.xml
 if errorlevel 4 set file=Convertible-2.xml
 if errorlevel 5 goto exit
-command /e:1024 /c ecb-run samples/%file%
+call ecb-run samples/%file%
 pause
 goto menu
 :exit

@@ -24,22 +24,22 @@ class timemap
 // real_time t = (lattice_time n) * dt
 {
  private:
-  int _N;
+  int _NN;
   double _T, _dt;
     
  public:
   virtual double t(const int n) const {return n*_dt;}
   //convert lattice time to real time
   virtual int n(const double t) const 
-    {return (int) ( (floor(t/_dt+0.5) > _N) ?  _N : floor(t/_dt+0.5));} 
-  //{return (int) ( (rint(t/_dt) > _N) ?  _N : rint(t  /_dt));} 
+    {return (int) ( (floor(t/_dt+0.5) > _NN) ?  _NN : floor(t/_dt+0.5));} 
+  //{return (int) ( (rint(t/_dt) > _NN) ?  _NN : rint(t  /_dt));} 
   //convert real time to lattice time
-  int N(void) const {return _N;}        // maximum lattice time
+  int N(void) const {return _NN;}        // maximum lattice time
   double T(void) const {return _T;}     // maximum real time
   double dt(void) const {return _dt;}   // scaling factor
-  timemap(void) : _T(0), _N(0), _dt(1) {}
-  timemap(const timemap &x) : _T(x._T), _N(x._N), _dt(x._dt){}
-  timemap(const int N, const double T) {_T = T; _N = N; _dt = _T/_N;}
+  timemap(void) : _T(0), _NN(0), _dt(1) {}
+  timemap(const timemap &x) : _T(x._T), _NN(x._NN), _dt(x._dt){}
+  timemap(const int N, const double T) {_T = T; _NN = N; _dt = _T/_NN;}
 };
 
 class bad_subscript
@@ -67,7 +67,7 @@ template <class X, class M> class lattice
   lattice(const lattice& x);
   int n(void) const {return _n;}
   M *timemap_ptr(void) const {return pTM;}
-  int rewind() {_n = pTM->N();}
+  void rewind() {_n = pTM->N();}
   void swap() {X *temp = v1; v1 = v3; v3 = v2; v2 = temp; if (_n > 0) _n--;}
   void redim(const int N, const double T);
   X& operator [] (int i) const 

@@ -34,7 +34,7 @@ MINGLIB2 = /usr/local/mingw/lib/gcc-lib/mingw32/2.95.3-5
 MINGWFLAG = -mno-cygwin -I$(MINGWINCLUDE) -L$(MINGLIB1) -L$(MINGLIB2)
 else
 MINGWFLAG =
-CPPFLAGS = -pedantic
+CPPFLAGS =  
 endif
 ##################################################
 

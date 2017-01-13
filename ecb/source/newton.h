@@ -18,6 +18,11 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
+
+  static const int numdiff_central = 0;
+  static const int numdiff_forward = 1;
+  static const int numdiff_backward = -1;
+
 template <class Z> class numdiff 
 // This class is used to compute the numerical derivative of a function f with respect to x
 // i.e., to compute d/dx of f(x,Z).
@@ -109,7 +114,7 @@ template <class Z> class newton_solver
   //these are outputs
   int iter_no(void)       // the number of iterations
     {return iter;};
-  char *err_msg()         // returns error message if any
+  const char *err_msg()         // returns error message if any
     {return _err_msg;}
   //constructor for analytic differentiation
   //requires pointer to f(x,Z), g=d/dx of f(x,Z) and Z
@@ -134,7 +139,7 @@ template <class Z> class newton_solver
   double g;
   int iter;
   void init();
-  char *_err_msg;
+  const char *_err_msg;
 };
 
 template <class Z> void newton_solver<Z>::init()

@@ -11,10 +11,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <coupon rate="3.5" frequency="1"/>
 <riskFreeRatePercent rate="5.25" compounding="semiAnnual"/>
 <requiredYieldPercent rate="8.75" compounding="semiAnnual"/>
-<!-- 
-frequency is integer 
-compounding choices are annual semiAnnual continuous
--->
 </bond>
 
 <stock 
@@ -23,17 +19,11 @@ countryDiscountPercent="15"
 volatilityPercent="30"
 >
 <dividends yieldPercent="1.5" yieldCompounding="annual">
-<!--
-<knownDiv amount="" year=""/>
--->
+
 </dividends>
 </stock>
 
 <conversion conversionPrice="9.18" earliestConversion="0.5"/>
-<!--
-maturity of conversion option is by default equal to bond maturity 
-unless the maturity attribute is set here to a different value
--->
 
 <callProvisions ignore="false">
 <call minTime="3.5" maxTime="6" minPrice="12.85" redemptionValue="100"/>
@@ -44,10 +34,6 @@ unless the maturity attribute is set here to a different value
 <putProvisions ignore="false">
 <put minTime="5.5" maxTime="5.5" putValue="6" 
 valueType="annualYieldPercent"/>
-<!--
-put value types are
-continuousYieldPercent semiAnnualYieldPercent annualYieldPercent amount
--->
 </putProvisions>
 
 <currencyAppreciation dividends="0" coupons="0" redeem="0" 
@@ -67,15 +53,5 @@ ytm="true"
 outputInterestRateCompounding="semiAnnual"
 vega="centralDifferences"
 />
-<!--
-the following default values apply unless set here explicitly
-ytmToler="0.01"
-maxIter="20"
--->
-<!--
-vega choices are
-none forwardDifferences centralDifferences
--->
-
 </convertible>
 </ecbdata>

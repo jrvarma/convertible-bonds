@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Output Output_Interest_Rate_Compounding="semi-annual">
+  <Option_Results Bond_Convertible_into_One_Share_Face_Value="9.18" Bond_Convertible_into_One_Share_Straight_Value="6.93527" Bond_Convertible_into_One_Share_Option_Value="1.54935" Delta="0.564045" Gamma="0.0824312" Vega="5.36937"/>
+  <Bond_Value_Results Bond_Value="92.4251" Straight_Bond_Value="75.5476" Option_Value="16.8775"/>
+  <YTM Bond_Price="104.999" YTM_Meaningless="true" YTM_Percent="4.55213" OAS_Basis_Points="-69"/>
+</Output>

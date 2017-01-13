@@ -207,7 +207,7 @@ inline void operator<<(String& strValue, const Node& node)
 
 // You can define these functions ourself if you prefer
 #ifndef ADVXMLPARSER_NO_CONVERSION
-
+#include "stdlib.h"
 inline void operator<<(int& nValue, const ConstValue& value)
 {
     nValue = atoi(value.Get().c_str());

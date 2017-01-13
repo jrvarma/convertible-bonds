@@ -1,6 +1,6 @@
 /*
     ecb.cpp for Valuation of Convertible Bonds
-    Copyright (C) 2001  Prof. Jayanth R. Varma, jrvarma@iimahd.ernet.in,
+    Copyright (C) 2001, 2004  Prof. Jayanth R. Varma, jrvarma@iimahd.ernet.in,
     Indian Institute of Management, Ahmedabad 380 015, INDIA
 
     This program is free software; you can redistribute it and/or modify
@@ -23,9 +23,12 @@
 #include <cstring>
 #include <cmath>
 #include <iostream>
-#include <strstream>
+#include <sstream>
 #include <iomanip>
 #include <vector>
+#include "stddef.h"
+using namespace std;
+
 #include "newton.h"
 #include "lattice.h"
 #include "OpenXMLParser.h"
@@ -35,10 +38,11 @@
 class MyNode
 {
 public:
-  double s; // stock price
-  double v; // option value
-  double w; // exp(r*dt) where r may be riskfree rate or desired ytm or a weighted average
-  char  ch; // flag to denote action (exercise, call or put)
+  double s;  // stock price
+  double vB; // coupon and redemption part of bond value 
+  double vO; // option value or option part of convertible
+  double v;  // = vB + vO = total value of convertible
+  char  ch;  // flag to denote action (exercise, call or put)
 };
 
 typedef lattice<MyNode, timemap> MyLattice;
@@ -55,6 +59,7 @@ class Results;
 class Params;
 class option;
 class stock;
+class MyError{public: int n;};
 
 typedef enum {continuous, annual, semi_annual, price} Compounding;
 
@@ -81,7 +86,7 @@ void ytm(MyLattice &L, Results& res);
 // compute ytm
 void print_params(void);
 // print out lattice parameters (u, d, p etc.)
-double node_value(struct nodevalue& v, const int n);
+void node_value(struct nodevalue& v, const int n);
 // compute the option/bond value at a node
 void rollback(MyLattice& L, Results& res);
 // roll back lattice computing values at time t-1 from values at time t
@@ -123,21 +128,9 @@ char dblformatstd[] = "%.6g";
 char dblformatcompact[] = "%.3g";
 char dblformatnarrow[] = "%.2g";
 char *dblformat = dblformatstd;
+ostringstream MyErrMsg;
+MyError MyErr;
 
-class {
-public:
-  ostrstream *msg;
-  void init() {
-    msg = new ostrstream(buf, buflen); 
-    (*msg) << "<?xml version = \"1.0\" encoding = \"UTF-8\"?>" << endl << "<Error>" << endl;
-    len = strlen((*msg).str());
-  }
-  bool empty() const {return strlen((*msg).str()) == len;}
-private:
-  static const int buflen = 1024;
-  char buf[buflen];
-  int len;
-}MyErr;                            // used to create error messages using cout
 
 /* classes*/
 
@@ -218,13 +211,14 @@ struct nodevalue
     refval,  // value considering possible exercise and possible calls
     putval,  // intermediate variable representing value if bond is put
     bestval, // value considering possible exercise, possible calls & possible puts
-    value,   // value at this node including coupon if any
+    bondval, // coupon and redemption part of value at this node
+    optval, // option part of value at this node
+    totval,   // total value at this node including coupon if any
     coup;    // coupon payment at this node
   bool exercise, // is the option exercised?
     called,      // is the bond called?
     converted,   // is it converted (exercised or converted on call)
     put_it;      // is the bond put?
-  double wnew;   // discount rate applicable to the value at this node
   char ch;       // characted representing action taken at this node (exercise, call, put)
 };  // used in computing value of option/convertible at a node
 
@@ -335,7 +329,7 @@ public:
   //other methods
   double cpn(const int i) const;
   struct pv fstraight(const double kd) const;
-  double put_call_value(struct nodevalue &v, const int n) const;
+  void put_call_value(struct nodevalue &v, const int n) const;
 private:
   class soft_call *_co;
   class put_option *_po;
@@ -395,7 +389,7 @@ double bond::cpn(const int i) const
   return _cpn;
 }
 
-double bond::put_call_value(struct nodevalue &v, const int n) const
+void bond::put_call_value(struct nodevalue &v, const int n) const
   //calculate option value considering calls and puts
   //on entry v.deadval, v.liveval, v.exercise and v.st are set
 {
@@ -412,8 +406,8 @@ double bond::put_call_value(struct nodevalue &v, const int n) const
       v.refval = min(v.refval, v.callval); // is this call better than other calls seen so far?
     }
   }
-  if(v.called)
-    v.converted = (v.refval == v.deadval); // investor converted instead of redeeming
+  v.converted = v.called && (v.refval == v.deadval); 
+  // investor converted instead of redeeming
   v.put_it = false;
   v.bestval = v.refval;
   for (int i = 0; i < _np; i++){
@@ -424,35 +418,25 @@ double bond::put_call_value(struct nodevalue &v, const int n) const
     }
     if(v.put_it) v.bestval = max(v.bestval, v.putval);
   }
-  v.value = (v.put_it) ? v.bestval : v.refval;
-  v.value += v.coup;
+  if (v.put_it){
+    v.bondval =  v.bestval + v.coup;
+    v.optval = 0;
+    }else if (v.converted || v.exercise){
+      v.optval = v.refval;
+      v.bondval = v.coup;
+    }else{
+      v.bondval += v.coup; // leave v.optval unchanged and add coupon to v.bondval
+  }
   v.ch = (v.put_it) ? 'P' : (v.called) ? 'C' : (v.exercise) ? 'E' : ' ';
-  if(v.put_it) 
-    v.wnew = wkd;
-  else if(v.exercise) 
-    v.wnew = wrf;
-  else if(v.called) 
-    v.wnew = (v.converted) ? wrf : wkd;  // did investor redeem or convert ?
-  if(disc_rate == disc_val_wt)
-    v.wnew = ((v.value - v.coup)*v.wnew + v.coup*wkd)/v.value;
-  return v.bestval;
 }
 
 void bond::set_params(void)
 {
   const double dt = TMptr->dt();
-  if(!convertible || disc_rate == disc_at_rf)
-    //discount both conversion flows and bond flows at risk free rate
-    wrf = wkd = exp(R*dt);
-  else if(disc_rate == disc_at_kd)
-    //discount both conversion flows and bond flows at bond yield
-    wrf = wkd = exp(kd*dt);
-  else{
-    //discount conversion flows at risk free rate
-    wrf = exp(R*dt);
-    //discount bond flows at bond yield
-    wkd = exp(kd*dt);
-  }
+  //discount conversion flows at risk free rate
+  wrf = exp(R*dt);
+  //discount bond flows at bond yield
+  wkd = exp(kd*dt);
   ne = TMptr->n(te); // convert te to lattice time
   nl = TMptr->n(tl); // convert tl to lattice time
   if (convertible){
@@ -488,7 +472,7 @@ public:
   double ytm; 
   double x, rf, price; // exercise/conversion price, risk free rate and bond price
   // above variables copied here for convenience
-  char *YTMerrmsg; // error if any in computing ytm
+  const char *YTMerrmsg; // error if any in computing ytm
   int YTMiter; // number of iterations used in computing ytm
 };
 
@@ -521,11 +505,11 @@ public:
   Compounding ratetype; // compounding type to be used while printing interest rates
 };
 
-
 int main(int argc, char *argv[])
 {
   static Results res;
-  MyErr.init();
+  MyErrMsg << "<?xml version = \"1.0\" encoding = \"UTF-8\"?>" << endl << "<Error>" << endl;
+  int hdr_len = MyErrMsg.str().size();
   try{
     MyLattice& L = data(getfile(argc, argv));
     binomial(L, res);
@@ -546,14 +530,14 @@ int main(int argc, char *argv[])
     cout << strXML << endl;
   }
   catch(std::bad_alloc){
-    *(MyErr.msg) << "Insufficient memory" << endl;
+    MyErrMsg << "Insufficient memory" << endl;
     throw;
   }
   catch(...){
     //Write XML file for error message and exit
-    if(MyErr.empty())
-      *(MyErr.msg) << "Unknown (Internal) Error" << endl;
-    cout << (*(MyErr.msg)).str() << endl << "Exiting\n</Error>";
+    if(MyErrMsg.str().size() == hdr_len)
+      MyErrMsg << "Unknown (Internal) Error" << endl;
+    cout << MyErrMsg.str() << endl << "Exiting\n</Error>";
   }
 }
 
@@ -581,7 +565,7 @@ void Vega(MyLattice& L, Results& res)
   numdiff<MyLattice> nd(f_of_sigma, &L);
   //initialise the numerical differentiator
   nd.type = (pParams->find_vega == 1) ? 
-    numdiff<MyLattice>::forward : numdiff<MyLattice>::central;
+    numdiff_forward : numdiff_central;
   //set numerical differentiation method
   //use defaults for other parameters of numerical differentiator
   res.vega = nd.deriv(res.f, pLP->sigma);
@@ -617,6 +601,7 @@ double f_of_sigma(const double x, MyLattice& L)
 
 void binomial(MyLattice& L, Results& res)
 {
+  
   if (!pOut->silent && pOut->params) print_params(); // print lattice parameters if needed
   init_lattice(L); // initialise the lattice
   while(L.n() > 0){
@@ -643,15 +628,17 @@ void init_lattice(MyLattice& L)
   struct nodevalue v;
   v.coup = (!pB->convertible) ? 0: pB->x*pB->cpn(n);// coupon at this node
   for (int i = 0; i <= n; i++){
-    v.wnew = pB->wkd; // initialise the discount rate to the one for bond flows
     v.st = L[i].s+pS->pvdiv(TMptr->t(n), pB->R);
     //stock price in lattice excludes the PV of known future dividends
     //we add this back to get the true market price of the stock
-    v.liveval = (!pB->convertible) ? 0 : pB->x*pB->s_redeem;
+    v.liveval = v.bondval = (!pB->convertible) ? 0 : pB->x*pB->s_redeem;
+    v.optval = 0;
     //if option is not exercised, value is 
     //0 for stock option and bond redemption value for convertible
-    L[i].v = node_value(v, n);  //compute the value of the option at this node
-    L[i].w = v.wnew;            //store the discount rate for this cash flow
+    node_value(v, n);  //compute the value at this node
+    L[i].vB = v.bondval;
+    L[i].vO = v.optval;
+    L[i].v = v.optval + v.bondval;
     L[i].ch = v.ch;             //store the action flag
   }
 }
@@ -666,20 +653,17 @@ void rollback(MyLattice& L, Results& res)
   v.coup = (!pB->convertible) ? 0: pB->x*pB->cpn(n); // coupon at this node
   for (int i = 0; i <= n; i++){
     L[i].s = L.upmove(i).s*pLP->d; // compute stock price at this node
-    v.liveval = p*L.upmove(i).v/L.upmove(i).w + (1-p)*L.dnmove(i).v/L.dnmove(i).w;
+    v.bondval = (p*L.upmove(i).vB + (1-p)*L.dnmove(i).vB)/pB->wkd;
+    v.optval =  (p*L.upmove(i).vO + (1-p)*L.dnmove(i).vO)/pB->wrf;
+    v.liveval = v.bondval + v.optval;
     //live value is discounted expected value of value at lattice time n+1
-    if(pB->disc_rate == bond::disc_val_wt){
-      v.wnew = (p*L.upmove(i).v + (1-p)*L.dnmove(i).v)/v.liveval;
-      // value and probability weighted harmonic average
-    }else{
-      v.wnew = p*L.upmove(i).w + (1-p)*L.dnmove(i).w;
-      // probability weighted arithmetic average
-    }
     v.st = L[i].s+pS->pvdiv(TMptr->t(n), pB->R);
     //stock price in lattice excludes the PV of known future dividends
-    //we add this back to get the true marker price of the stock
-    L[i].v = node_value(v, n); // compute option value at this node
-    L[i].w = v.wnew;           //store the discount rate for this cash flow
+    //we add this back to get the true market price of the stock
+    node_value(v, n);  //compute the value at this node
+    L[i].vB = v.bondval;
+    L[i].vO = v.optval;
+    L[i].v = v.optval + v.bondval;
     L[i].ch = v.ch;            //store the action flag
   }
 }
@@ -698,18 +682,19 @@ double deadvalue(const double st, const bool last)
   return value;
 }
 
-double node_value(struct nodevalue& v, const int n)
+void node_value(struct nodevalue& v, const int n)
 {
   v.deadval = deadvalue(v.st, TMptr->N() == n);
   v.exercise = (n >= pB->ne && n <= pB->nl && v.deadval > v.liveval);
+  if(v.exercise){
+    v.optval = v.deadval;
+    v.bondval = 0;
+  }// else values set in rollback are left unchanged
   if(!pB->convertible){
-    v.value = (v.exercise) ? v.deadval : v.liveval;
     v.ch = (v.exercise) ? 'E' : ' ';
-    v.wnew = pB->wrf;
   }else{
     pB->put_call_value(v, n); // compute value taking call and put into account
   }
-  return(v.value);
 }
 
 void compute(MyLattice& L, Results& res)
@@ -829,7 +814,7 @@ MyLattice& data(FILE *infile)
   pB = &B;
   pLP = &LP;
   //read input file into buffer
-  long nSize = 0;
+  long nSize = 20000;
   char* pBuffer = OpenXmlFile(infile, nSize);
   try{
     Parser parser;
@@ -843,7 +828,7 @@ MyLattice& data(FILE *infile)
     //for convertibles the root but one element is convertible, else it is American
     const char* rootstr = (!B.convertible) ? "American" : "convertible";
     const Element& root = pDocument->GetRoot()(rootstr);
-    char *outputs, *stock, *computation; // these are assigned below
+    const char *outputs, *stock, *computation; // these are assigned below
     if (!B.convertible){
       B.call = (enum_value(root("Option")["type"], optionTypeList) == 0);
       B.put = ! B.call;
@@ -1013,8 +998,8 @@ MyLattice& data(FILE *infile)
   }
   catch(ParsingException e){
     // Parsing error
-    *(MyErr.msg) << "XML Parsing error at line " << e.GetLine() << " in input file" 
-		 << endl;
+    //*(MyErr.msg) << "XML Parsing error at line " << e.GetLine() << " in input file" 
+    //		 << endl;
     throw MyErr;
   }
   delete[] pBuffer;
@@ -1176,9 +1161,11 @@ void print_lattice(const MyLattice& L)
   for (int i = 0; i <= n; i++){
     Element& node = stage("Node", i);
     node["S"] <<  dbl2str(L[i].s);
+    if (pB->convertible){
+      node["VB"] << L[i].vB;
+      node["VO"] << L[i].vO;
+    }
     node["V"] << L[i].v;
-    if(pB->convertible)
-      node["R"] << dbl2str(100*log(L[i].w)/dt);
     switch(L[i].ch){
     case 'P' : node["Action"] << "Put"; break;
     case 'E' : node["Action"] << "Exercised"; break;
@@ -1243,11 +1230,11 @@ FILE *getfile(int argc, char **argv)
   FILE *infile;
 
   if (argc < 2){
-    //    *(MyErr.msg) << "No Input File Specified"  << endl;
+    // MyErrMsg << "No Input File Specified"  << endl;
     return stdin;
   }
   if (NULL == (infile = fopen(argv[1],"rb"))){
-    *(MyErr.msg) << "Unable to open " << argv[1] << endl;
+    MyErrMsg << "Unable to open " << argv[1] << endl;
     throw MyErr;
   }
   return infile;

@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <ecbdata 
 xmlns="ecbdata.xsd" 
-xsi:schemaLocation="ecbdata.xsd ../ecbdata.xsd"
+xsi:schemaLocation="ecbdata.xsd ecbdata.xsd"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 <convertible>
 
 <bond redemptionValue="100" currentPrice="104.999">
-<maturity years="6" days="0"/>
-<coupon rate="3.5" frequency="1"/>
-<riskFreeRatePercent rate="5.25" compounding="semiAnnual"/>
-<requiredYieldPercent rate="8.75" compounding="semiAnnual"/>
+<maturity years="3" days="0"/>
+<coupon rate="2" frequency="1"/>
+<riskFreeRatePercent rate="5" compounding="semiAnnual"/>
+<requiredYieldPercent rate="10" compounding="semiAnnual"/>
 <!-- 
 frequency is integer 
 compounding choices are annual semiAnnual continuous
@@ -18,32 +18,31 @@ compounding choices are annual semiAnnual continuous
 </bond>
 
 <stock 
-currentPrice="8.19" 
-countryDiscountPercent="15" 
-volatilityPercent="30"
+currentPrice="100" 
+countryDiscountPercent="0" 
+volatilityPercent="10"
 >
-<dividends yieldPercent="1.5" yieldCompounding="annual">
+<dividends yieldPercent="0" yieldCompounding="annual">
 <!--
 <knownDiv amount="" year=""/>
 -->
 </dividends>
 </stock>
 
-<conversion conversionPrice="9.18" earliestConversion="0.5"/>
+<conversion conversionPrice="100" earliestConversion="0"/>
 <!--
 maturity of conversion option is by default equal to bond maturity 
 unless the maturity attribute is set here to a different value
 -->
 
 <callProvisions ignore="false">
-<call minTime="3.5" maxTime="6" minPrice="12.85" redemptionValue="100"/>
-<call minTime="5.5" maxTime="6" minPrice="0" redemptionValue="100"/>
+<call minTime="1" maxTime="3" minPrice="115" redemptionValue="100"/>
 </callProvisions>
 
 
 <putProvisions ignore="false">
-<put minTime="5.5" maxTime="5.5" putValue="6" 
-valueType="annualYieldPercent"/>
+<put minTime="2" maxTime="2" putValue="95" 
+valueType="amount"/>
 <!--
 put value types are
 continuousYieldPercent semiAnnualYieldPercent annualYieldPercent amount
@@ -54,7 +53,7 @@ continuousYieldPercent semiAnnualYieldPercent annualYieldPercent amount
  callPrice="0" callRedeem="0" putValue="0" compounding="continuous"/>
 
 <computation 
-numberOfLatticePoints="6" 
+numberOfLatticePoints="3" 
 />
 
 <outputs
@@ -64,8 +63,8 @@ fullLattice="true"
 optionResults="true"
 bondResults="true"
 ytm="true"
-outputInterestRateCompounding="semiAnnual"
-vega="centralDifferences"
+outputInterestRateCompounding="annual"
+vega="none"
 />
 <!--
 the following default values apply unless set here explicitly

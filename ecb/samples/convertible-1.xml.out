@@ -13,7 +13,7 @@ Input_Data
       YTM_Computation = true
       YTM_Tolerance = 0.01
       YTM_Iteration_Limit = 20
-      Lattice_Discounting = probWeighted
+      Lattice_Discounting = 
    Stock
       Unadjusted_Stock_Price = 8.19
       Country-Discount_on_Stock_Price_Percent = 15
@@ -58,52 +58,52 @@ Lattice_Paramaters
 Full_Lattice
    Bond_Redemption_Value = 9.18
    Step = 6.  Time = 6.  Coupons = 0.3213.  
-      [S = 42.1146  V = 42.435921  R = 5.18228  Action = Exercised]
-      [S = 23.113  V = 23.434294  R = 5.18228  Action = Exercised]
-      [S = 12.6847  V = 13.005980  R = 5.18228  Action = Exercised]
-      [S = 6.9615  V = 11.102136  R = 8.564  Action = Put]
-      [S = 3.82055  V = 11.102136  R = 8.564  Action = Put]
-      [S = 2.09676  V = 11.102136  R = 8.564  Action = Put]
-      [S = 1.15073  V = 11.102136  R = 8.564  Action = Put]
+      [S = 42.1146  VB = 0.321300  VO = 42.114621  V = 42.435921  Action = Exercised]
+      [S = 23.113  VB = 0.321300  VO = 23.112994  V = 23.434294  Action = Exercised]
+      [S = 12.6847  VB = 0.321300  VO = 12.684680  V = 13.005980  Action = Exercised]
+      [S = 6.9615  VB = 11.102136  VO = 0.000000  V = 11.102136  Action = Put]
+      [S = 3.82055  VB = 11.102136  VO = 0.000000  V = 11.102136  Action = Put]
+      [S = 2.09676  VB = 11.102136  VO = 0.000000  V = 11.102136  Action = Put]
+      [S = 1.15073  VB = 11.102136  VO = 0.000000  V = 11.102136  Action = Put]
    Step = 5.  Time = 5.  Coupons = 0.3213.  
-      [S = 31.1993  V = 31.520578  R = 5.18228  Action = Exercised]
-      [S = 17.1225  V = 17.443827  R = 5.18228  Action = Called]
-      [S = 9.39704  V = 11.554433  R = 6.94523]
-      [S = 5.15721  V = 10.512224  R = 8.564]
-      [S = 2.83033  V = 10.512224  R = 8.564]
-      [S = 1.55332  V = 10.512224  R = 8.564]
+      [S = 31.1993  VB = 0.321300  VO = 31.199278  V = 31.520578  Action = Exercised]
+      [S = 17.1225  VB = 0.321300  VO = 17.122527  V = 17.443827  Action = Exercised]
+      [S = 9.39704  VB = 5.733420  VO = 5.816115  V = 11.549534]
+      [S = 5.15721  VB = 10.512224  VO = 0.000000  V = 10.512224]
+      [S = 2.83033  VB = 10.512224  VO = 0.000000  V = 10.512224]
+      [S = 1.55332  VB = 10.512224  VO = 0.000000  V = 10.512224]
    Step = 4.  Time = 4.  Coupons = 0.3213.  
-      [S = 23.113  V = 23.434294  R = 5.18228  Action = Exercised]
-      [S = 12.6847  V = 13.893440  R = 6.09777]
-      [S = 6.9615  V = 10.516291  R = 7.78556]
-      [S = 3.82055  V = 9.970729  R = 8.564]
-      [S = 2.09676  V = 9.970729  R = 8.564]
+      [S = 23.113  VB = 0.321300  VO = 23.112994  V = 23.434294  Action = Exercised]
+      [S = 12.6847  VB = 3.185125  VO = 10.706543  V = 13.891668]
+      [S = 6.9615  VB = 7.852436  VO = 2.666775  V = 10.519211]
+      [S = 3.82055  VB = 9.970729  VO = 0.000000  V = 9.970729]
+      [S = 2.09676  VB = 9.970729  VO = 0.000000  V = 9.970729]
    Step = 3.  Time = 3.  Coupons = 0.3213.  
-      [S = 17.1225  V = 17.825540  R = 5.65672]
-      [S = 9.39704  V = 11.664226  R = 6.97408]
-      [S = 5.15721  V = 9.751937  R = 8.18885]
-      [S = 2.83033  V = 9.473678  R = 8.564]
+      [S = 17.1225  VB = 1.975562  VO = 15.854374  V = 17.829936]
+      [S = 9.39704  VB = 5.460373  VO = 6.218449  V = 11.678821]
+      [S = 5.15721  VB = 8.534705  VO = 1.222756  V = 9.757461]
+      [S = 2.83033  VB = 9.473678  VO = 0.000000  V = 9.473678]
    Step = 2.  Time = 2.  Coupons = 0.3213.  
-      [S = 12.6847  V = 14.081116  R = 6.34009]
-      [S = 6.9615  V = 10.220760  R = 7.60407]
-      [S = 3.82055  V = 9.157013  R = 8.38301]
+      [S = 12.6847  VB = 3.788804  VO = 10.322615  V = 14.111418]
+      [S = 6.9615  VB = 6.792762  VO = 3.451603  V = 10.244365]
+      [S = 3.82055  VB = 8.601205  VO = 0.560652  V = 9.161857]
    Step = 1.  Time = 1.  Coupons = 0.3213.  
-      [S = 9.39704  V = 11.601520  R = 6.99569]
-      [S = 5.15721  V = 9.249846  R = 8.00762]
+      [S = 9.39704  VB = 5.224984  VO = 6.427748  V = 11.652732]
+      [S = 5.15721  VB = 7.414932  VO = 1.857881  V = 9.272814]
    Step = 0.  Time = 0.  Coupons = 0.  
-      [S = 6.9615  V = 9.638868  R = 7.52023]
+      [S = 6.9615  VB = 5.835614  VO = 3.859405  V = 9.695019]
 Option_Results
    Bond_Convertible_into_One_Share_Face_Value = 9.18
    Bond_Convertible_into_One_Share_Straight_Value = 6.93527
-   Bond_Convertible_into_One_Share_Option_Value = 2.7036
-   Delta = 0.555509
-   Gamma = 0.0757754
-   Vega = 5.36963
+   Bond_Convertible_into_One_Share_Option_Value = 2.75975
+   Delta = 0.558381
+   Gamma = 0.0746919
+   Vega = 5.99783
 Bond_Value_Results
-   Bond_Value = 104.999
+   Bond_Value = 105.61
    Straight_Bond_Value = 75.5476
-   Option_Value = 29.451
+   Option_Value = 30.0626
 YTM
    Bond_Price = 104.999
-   YTM_Percent = 8.75
-   OAS_Basis_Points = 350
+   YTM_Percent = 8.93866
+   OAS_Basis_Points = 369

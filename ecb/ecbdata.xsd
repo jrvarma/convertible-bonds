@@ -1,11 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE xsd:schema SYSTEM "XMLSchema.dtd" [
-<!ATTLIST xsd:schema xmlns:xsd CDATA #IMPLIED>
-<!ATTLIST xsd:schema xmlns CDATA #IMPLIED>
-<!ENTITY % p "xsd:">
-<!ENTITY % s ":xsd">
-]>
-<xsd:schema xmlns:xsd="http://www.w3.org/2000/10/XMLSchema"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     targetNamespace="ecbdata.xsd"
     xmlns="ecbdata.xsd"
     elementFormDefault="qualified">
@@ -349,16 +343,6 @@ use="required"/>
 </xsd:simpleType>
 </xsd:attribute>
 
-<xsd:attribute name="latticeDiscounting" use="required">
-<xsd:simpleType>
-<xsd:restriction base="xsd:string">
-<xsd:enumeration value="riskFree"/>
-<xsd:enumeration value="bondYield"/>
-<xsd:enumeration value="probWeighted"/>
-<xsd:enumeration value="probAndValueWeighted"/>
-</xsd:restriction>
-</xsd:simpleType>
-</xsd:attribute>
 
 </xsd:complexType>
 </xsd:element>   <!-- computation -->

@@ -62,6 +62,6 @@ Option_Results
    Delta = -0.626479
    Gamma = 0.0151892
    Theta_Indirect = 4.83935
-   Theta_Direct_2dt = -1.42109e-014
-   Theta_Direct_4dt = -7.10543e-015
-   Vega = 1.42109e-011
+   Theta_Direct_2dt = -1.42109e-14
+   Theta_Direct_4dt = -7.10543e-15
+   Vega = 5.68434e-11
