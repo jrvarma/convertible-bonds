@@ -25,7 +25,7 @@ template<class N> struct Iterator
     // the template 'iterator'. Instead, I directly define typedefs.
     typedef advstd::bidirectional_iterator_tag iterator_category;
     typedef N           value_type;
-    typedef ptrdiff_t   difference_type; // I'm not sure...
+    typedef std::ptrdiff_t   difference_type; // I'm not sure...
     typedef N*          pointer;
     typedef N&          reference;
 
@@ -152,7 +152,7 @@ template<class N> struct ConstIterator
     // the template 'iterator'. Instead, I directly define typedefs.
     typedef advstd::bidirectional_iterator_tag iterator_category;
     typedef const N     value_type;
-    typedef ptrdiff_t   difference_type; // I'm not sure...
+    typedef std::ptrdiff_t   difference_type; // I'm not sure...
     typedef const N*    pointer;
     typedef const N&    reference;
 
@@ -285,7 +285,7 @@ template<> struct Iterator<Node>
 {
     typedef advstd::bidirectional_iterator_tag iterator_category;
     typedef Node        value_type;
-    typedef ptrdiff_t   difference_type;
+    typedef std::ptrdiff_t   difference_type;
     typedef Node*       pointer;
     typedef Node&       reference;
 
@@ -366,7 +366,7 @@ template<> struct ConstIterator<Node>
 {
     typedef advstd::bidirectional_iterator_tag iterator_category;
     typedef const Node  value_type;
-    typedef ptrdiff_t   difference_type;
+    typedef std::ptrdiff_t   difference_type;
     typedef const Node* pointer;
     typedef const Node& reference;
 
@@ -455,7 +455,7 @@ template<> struct Iterator<Attribute>
 {
     typedef advstd::bidirectional_iterator_tag iterator_category;
     typedef Attribute   value_type;
-    typedef ptrdiff_t   difference_type;
+    typedef std::ptrdiff_t   difference_type;
     typedef Attribute*  pointer;
     typedef Attribute&  reference;
 
@@ -536,7 +536,7 @@ template<> struct ConstIterator<Attribute>
 {
     typedef advstd::bidirectional_iterator_tag iterator_category;
     typedef const Attribute     value_type;
-    typedef ptrdiff_t           difference_type;
+    typedef std::ptrdiff_t           difference_type;
     typedef const Attribute*    pointer;
     typedef const Attribute&    reference;
 
